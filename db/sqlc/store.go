@@ -35,3 +35,23 @@ func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
 	}
 	return tx.Commit()
 }
+
+type TransferTXParams struct {
+	FromAccountID int64 `json: "from_account_id"`
+	ToAccountID   int64 `json: "to_account_id"`
+	Amount        int64 `json: "amount"`
+}
+type TransferTXResult struct {
+	Transfer    Transfer `json: "transfer"`
+	FromAccount Account  `json: "from_account"`
+	ToAccount   Account  `json: "to_account"`
+	FromEntry   Entry    `json: "from_entry"`
+	ToEntry     Entry    `json: "to_entry"`
+}
+
+// Function to execute a Transfer using a transaction
+// TransferTX performs a money transfer from one account to the other.
+// It creates the transfer, add account entries, and update accounts' balance within a single database transaction
+func (store *Store) TransferTX(ctx context.Context, arg TransferTXParams) (TransferTXResult, error) {
+
+}
