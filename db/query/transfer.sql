@@ -18,7 +18,7 @@ OFFSET $2;
 
 -- name: UpdateTransfer :exec
 UPDATE transfers
-SET amount = $4
+SET amount = $2
 WHERE id = $1;
 
 -- name: DeleteTransfer :exec
