@@ -20,3 +20,7 @@ OFFSET $2;
 UPDATE transfers
 SET amount = $4
 WHERE id = $1;
+
+--name: DeleteTransfer :exec
+DELETE FROM transfers
+WHERE id = $1;
