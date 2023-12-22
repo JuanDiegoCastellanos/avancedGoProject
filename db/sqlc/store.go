@@ -84,4 +84,5 @@ func (store *Store) TransferTX(ctx context.Context, arg TransferTXParams) (Trans
 
 		return nil
 	})
+	return result, err
 }
