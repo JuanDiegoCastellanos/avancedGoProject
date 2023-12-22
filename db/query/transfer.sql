@@ -15,3 +15,8 @@ SELECT * FROM transfers
 ORDER BY id
 LIMIT $1
 OFFSET $2;
+
+--name: UpdateTransfer :exec
+UPDATE transfers
+SET amount = $4
+WHERE id = $1;
