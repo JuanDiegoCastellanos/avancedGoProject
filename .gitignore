@@ -1,0 +1,11 @@
+.vscode
+.idea
+node_modules
+dist
+build
+*.log
+*.lock
+*.out
+*.tmp
+*.cache
+*.vscode
