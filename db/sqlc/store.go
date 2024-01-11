@@ -49,6 +49,8 @@ type TransferTXResult struct {
 	ToEntry     Entry    `json: "to_entry"`
 }
 
+//var txKey = struct{}{}
+
 // Function to execute a Transfer using a transaction
 // TransferTX performs a money transfer from one account to the other.
 // It creates the transfer, add account entries, and update accounts' balance within a single database transaction
@@ -57,6 +59,11 @@ func (store *Store) TransferTX(ctx context.Context, arg TransferTXParams) (Trans
 
 	err := store.execTx(ctx, func(q *Queries) error {
 		var errTrans error
+
+		// txName := ctx.Value(txKey)
+
+		// fmt.Println(txName, "create transfer")
+
 		result.Transfer, errTrans = q.CreateTransfer(ctx, CreateTransferParams{
 			FromAccountID: arg.FromAccountID,
 			ToAccountID:   arg.ToAccountID,
@@ -67,6 +74,7 @@ func (store *Store) TransferTX(ctx context.Context, arg TransferTXParams) (Trans
 			return errTrans
 		}
 
+		// fmt.Println(txName, "create entry 1")
 		result.FromEntry, errTrans = q.CreateEntry(ctx, CreateEntryParams{
 			AccountID: arg.FromAccountID,
 			Amount:    -arg.Amount,
@@ -76,6 +84,7 @@ func (store *Store) TransferTX(ctx context.Context, arg TransferTXParams) (Trans
 			return errTrans
 		}
 
+		// fmt.Println(txName, "create entry 2")
 		result.ToEntry, errTrans = q.CreateEntry(ctx, CreateEntryParams{
 			AccountID: arg.ToAccountID,
 			Amount:    arg.Amount,
@@ -84,30 +93,51 @@ func (store *Store) TransferTX(ctx context.Context, arg TransferTXParams) (Trans
 			return errTrans
 		}
 
+		// THIS IS THE OLD BLOCK
 		// get account -> update its balance
-		account1, err := q.GetAccount(ctx, arg.FromAccountID)
-		if err != nil {
-			return err
-		}
-		result.FromAccount, err = q.UpdateAccount(ctx, UpdateAccountParams{
-			ID:      arg.FromAccountID,
-			Balance: account1.Balance - arg.Amount,
+		// fmt.Println(txName, "get account 1")
+		// account1, err := q.GetAccountForUpdate(ctx, arg.FromAccountID)
+		// if err != nil {
+		// 	return err
+		// }
+		// // fmt.Println(txName, "update account 1")
+		// result.FromAccount, err = q.UpdateAccount(ctx, UpdateAccountParams{
+		// 	ID:      arg.FromAccountID,
+		// 	Balance: account1.Balance - arg.Amount,
+		// })
+		// if err != nil {
+		// 	return err
+		// }
+		// // fmt.Println(txName, "get account 2")
+		// account2, err := q.GetAccountForUpdate(ctx, arg.ToAccountID)
+		// if err != nil {
+		// 	return err
+		// }
+		// // fmt.Println(txName, "update account 2")
+		// result.ToAccount, err = q.UpdateAccount(ctx, UpdateAccountParams{
+		// 	ID:      arg.ToAccountID,
+		// 	Balance: account2.Balance + arg.Amount,
+		// })
+		// if err != nil {
+		// 	return err
+		// }
+
+		// THIS IS THE NEW BLOCK AND THE NEW WAY TO UPDATE ACCOUNT'S BALANCES
+		result.FromAccount, errTrans = q.AddAccountBalance(ctx, AddAccountBalanceParams{
+			ID:     arg.FromAccountID,
+			Amount: -arg.Amount,
 		})
-		if err != nil {
-			return err
+		if errTrans != nil {
+			return errTrans
+		}
+		result.ToAccount, errTrans = q.AddAccountBalance(ctx, AddAccountBalanceParams{
+			ID:     arg.ToAccountID,
+			Amount: arg.Amount,
+		})
+		if errTrans != nil {
+			return errTrans
 		}
 
-		account2, err := q.GetAccount(ctx, arg.ToAccountID)
-		if err != nil {
-			return err
-		}
-		result.ToAccount, err = q.UpdateAccount(ctx, UpdateAccountParams{
-			ID:      arg.ToAccountID,
-			Balance: account2.Balance + arg.Amount,
-		})
-		if err != nil {
-			return err
-		}
 		return nil
 	})
 	return result, err
