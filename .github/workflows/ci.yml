@@ -54,3 +54,6 @@ jobs:
 
       - name: Test
         run: make test
+
+        env:
+          POSTGRES_PORT: 5433
