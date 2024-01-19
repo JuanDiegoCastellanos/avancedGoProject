@@ -18,7 +18,7 @@ jobs:
         env:
           POSTGRES_PASSWORD: manolo221212
           POSTGRES_USER: root
-          POSTGRES_DATABASE: simple_posts
+          POSTGRES_DB: simple_posts
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
