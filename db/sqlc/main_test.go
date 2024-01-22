@@ -9,12 +9,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var (
-	testQueries *Queries
-	testDB      *sql.DB
-	dbDriver    = "postgres"
-	dbSource    = "postgresql://root:manolo221212@localhost:5433/simple_posts?sslmode=disable"
+const (
+	dbDriver = "postgres"
+	dbSource = "postgresql://root:manolo221212@localhost:5433/simple_posts?sslmode=disable"
 )
+
+var testQueries *Queries
+var testDB *sql.DB
 
 func TestMain(m *testing.M) {
 	var err error
