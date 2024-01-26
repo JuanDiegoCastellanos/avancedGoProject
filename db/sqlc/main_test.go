@@ -1,8 +1,8 @@
 package db
 
 import (
-	"avancedGo/util"
 	"database/sql"
+	util "github.com/JuanDiegoCastellanos/advancedGoProject/util"
 	"log"
 	"os"
 	"testing"

@@ -1,9 +1,9 @@
 package db
 
 import (
-	"avancedGo/util"
 	"context"
 	"database/sql"
+	util "github.com/JuanDiegoCastellanos/advancedGoProject/util"
 	"testing"
 	"time"
 
@@ -30,7 +30,7 @@ func createRandomAccount(t *testing.T) Account {
 	return account
 }
 
-func TestCreateAccoutn(t *testing.T) {
+func TestCreateAccount(t *testing.T) {
 	createRandomAccount(t)
 }
 
@@ -80,11 +80,11 @@ func TestDeleteAccount(t *testing.T) {
 
 	require.NoError(t, err)
 
-	accountInexistent, err := testQueries.GetAccount(context.Background(), randomAccount1.ID)
+	accountNonexistent, err := testQueries.GetAccount(context.Background(), randomAccount1.ID)
 
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
-	require.Empty(t, accountInexistent)
+	require.Empty(t, accountNonexistent)
 
 }
 
