@@ -1,7 +1,7 @@
 package api
 
 import (
-	db "avancedGo/db/sqlc"
+	db "github.com/JuanDiegoCastellanos/advancedGoProject/db/sqlc"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,9 +1,9 @@
 package api
 
 import (
-	db "avancedGo/db/sqlc"
 	"database/sql"
 	"errors"
+	db "github.com/JuanDiegoCastellanos/advancedGoProject/db/sqlc"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
