@@ -6,15 +6,15 @@ import (
 )
 
 type Server struct {
-	store  *db.Store   `json:"store"`
+	store  db.Store    `json:"store"`
 	router *gin.Engine `json:"router"`
 }
 
-func NewServer(store *db.Store) *Server {
+// NewServer function to create a new server passing by parameter the store interface where there are all
+// the functions to persist data or execute transactions
+func NewServer(store db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
-
-	// Queda borrar y actualizar account
 
 	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccountById)

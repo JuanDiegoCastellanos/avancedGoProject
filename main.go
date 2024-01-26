@@ -3,26 +3,25 @@ package main
 import (
 	"avancedGo/api"
 	db "avancedGo/db/sqlc"
+	"avancedGo/util"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"log"
 )
 
-var (
-	dbDriver = "postgres"
-	dbSource = "postgresql://root:manolo221212@localhost:5433/simple_posts?sslmode=disable"
-	address  = "0.0.0.0:8080"
-)
-
 func main() {
-	testDB, err := sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot read the app config file", err)
+	}
+	testDB, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to database... ", err)
 	}
 	store := db.NewStore(testDB)
 	server := api.NewServer(store)
 
-	err = server.Start(address)
+	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("cannot start the server... ", err)
 	}
