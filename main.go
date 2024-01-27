@@ -1,9 +1,10 @@
 package main
 
 import (
-	"avancedGo/api"
-	db "avancedGo/db/sqlc"
-	"avancedGo/util"
+	"github.com/JuanDiegoCastellanos/advancedGoProject/api"
+	db "github.com/JuanDiegoCastellanos/advancedGoProject/db/sqlc"
+	"github.com/JuanDiegoCastellanos/advancedGoProject/util"
+
 	"database/sql"
 	_ "github.com/lib/pq"
 	"log"
